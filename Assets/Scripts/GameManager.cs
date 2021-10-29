@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour {
 
         mEnemySystem = new EnemySpawnSystem(b.min, b.max);
         // Make sure all enemy sees the same EnemySystem and WayPointSystem
-        EnemyBehavior.InitializeEnemySystem(mEnemySystem, mWayPoints);
+        EnemyBehavior.InitializeEnemySystem(mEnemySystem, mWayPoints, mHero);
         mEnemySystem.GenerateEnemy();  // Can only create enemies when WayPoint is initialized in EnemyBehavior
     }
     
