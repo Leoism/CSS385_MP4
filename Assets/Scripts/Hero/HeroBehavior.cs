@@ -8,11 +8,13 @@ public class HeroBehavior : MonoBehaviour {
     private const float kHeroRotateSpeed = 90f/2f; // 90-degrees in 2 seconds
     private const float kHeroSpeed = 20f;  // 20-units in a second
     private float mHeroSpeed = kHeroSpeed;
-    
+
+    public GameObject heroPos;
+
     private bool mMouseDrive = true;
     //  Hero state
     private int mHeroTouchedEnemy = 0;
-    private void TouchedEnemy() { mHeroTouchedEnemy++; }
+    public void TouchedEnemy() { mHeroTouchedEnemy++; }
     public string GetHeroState() { return "HERO: Drive(" + (mMouseDrive?"Mouse":"Key") + 
                                           ") TouchedEnemy(" + mHeroTouchedEnemy + ")   " 
                                             + mEggSystem.EggSystemStatus(); }
@@ -26,7 +28,8 @@ public class HeroBehavior : MonoBehaviour {
     }
 
     void Start ()
-    { 
+    {
+        heroPos = GameObject.Find("Hero");
     }
 	
 	// Update is called once per frame
