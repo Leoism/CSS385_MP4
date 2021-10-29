@@ -6,8 +6,10 @@ public class GameManager : MonoBehaviour {
     public static GameManager sTheGlobalBehavior = null;
 
     public Text mGameStateEcho = null;  // Defined in UnityEngine.UI
+    public Text waypointCamStatus = null;
     public HeroBehavior mHero = null;
     public WayPointSystem mWayPoints = null;
+    public WaypointCameraBehavior waypointCameraBehavior = null;
     private EnemySpawnSystem mEnemySystem = null;
 
     private CameraSupport mMainCamera;
@@ -33,11 +35,10 @@ public class GameManager : MonoBehaviour {
     
 	void Update () {
         EchoGameState(); // always do this
-
+        EchoWaypointCamStatus();
         if (Input.GetKey(KeyCode.Q))
             Application.Quit();
     }
-
 
     #region Bound Support
     public CameraSupport.WorldBoundStatus CollideWorldBound(Bounds b) { return mMainCamera.CollideWorldBound(b); }
@@ -48,5 +49,10 @@ public class GameManager : MonoBehaviour {
         mGameStateEcho.text =  mWayPoints.GetWayPointState() + "  " + 
                                mHero.GetHeroState() + "  " + 
                                mEnemySystem.GetEnemyState();
+    }
+
+    private void EchoWaypointCamStatus()
+    {
+        waypointCamStatus.text = waypointCameraBehavior.GetCameraState();
     }
 }
