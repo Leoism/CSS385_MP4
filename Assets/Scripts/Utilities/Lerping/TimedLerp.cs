@@ -6,8 +6,8 @@ public class TimedLerp
 {
   private float mLerpTime;
   private float mRate;
-  private Vector2 mEnd;
-  private Vector2 mCurrent;
+  private Vector3 mEnd;
+  private Vector3 mCurrent;
 
   // the timed parameters
   private float mStartTime; //
@@ -23,14 +23,14 @@ public class TimedLerp
     mLerpTime = timeInSeconds;
     mRate = rate;
   }
-  public void BeginLerp(Vector2 start, Vector2 end)
+  public void BeginLerp(Vector3 start, Vector3 end)
   {
     mCurrent = start;
     mEnd = end;
     mStartTime = Time.realtimeSinceStartup;
     mLerpEnded = false;
   }
-  public Vector2 UpdateLerp()
+  public Vector3 UpdateLerp()
   {
     mLerpEnded = ((Time.realtimeSinceStartup - mStartTime) > mLerpTime);
     if (mLerpEnded)

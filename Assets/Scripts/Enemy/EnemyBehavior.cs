@@ -9,7 +9,7 @@ public partial class EnemyBehavior : MonoBehaviour
     static private EnemySpawnSystem sEnemySystem = null;
     static private HeroBehavior sHeroSystem = null;
     static private EnemyCamBehavior sEnemyCamera = null;
-
+    private TimedLerp tLerp = new TimedLerp(2f, 2f);
     private bool enemCamActive = false;
     static public void InitializeEnemySystem(EnemySpawnSystem s, WayPointSystem w, HeroBehavior h, EnemyCamBehavior e) { sEnemySystem = s; sWayPoints = w; sHeroSystem = h; sEnemyCamera = e; }
 
@@ -49,6 +49,11 @@ public partial class EnemyBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (tLerp.LerpIsActive())
+        {
+            Vector3 s = tLerp.UpdateLerp();
+            transform.position = s;
+        }
         //Replace with cases
         //Plane State machine
         if (ccwStateCheck)
@@ -117,10 +122,10 @@ public partial class EnemyBehavior : MonoBehaviour
             mNumHit++;
             if (stunnedStateCheck)
             {
-                //Vector3 targetPos = Vector3.Scale(sEggSystem.eggPos, new Vector3 (4,4,4));
+                Vector3 finalPos = Vector3.Scale(g.transform.up, new Vector3(8f, 8f, 8f));
+                finalPos += transform.position;
+                tLerp.BeginLerp(transform.position, finalPos);
 
-                /*targetPos += transform.position;
-                transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime/2f);*/
                 eggStateCheck = true;
                 stunnedStateCheck = false;
             }
@@ -130,6 +135,9 @@ public partial class EnemyBehavior : MonoBehaviour
             }
             else
             {
+                Vector3 finalPos = Vector3.Scale(g.transform.up, new Vector3(4f, 4f, 4f));
+                finalPos += transform.position;
+                tLerp.BeginLerp(transform.position, finalPos);
                 stunnedStateCheck = true;
             }
 
