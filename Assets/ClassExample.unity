@@ -302,7 +302,7 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0.8
-    y: 0.7
+    y: 0.58
     width: 0.2
     height: 0.3
   near clip plane: 0.3
@@ -532,8 +532,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 312, y: 22}
-  m_SizeDelta: {x: 600, y: 26.7}
+  m_AnchoredPosition: {x: 500, y: 22}
+  m_SizeDelta: {x: 1000, y: 26.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &381550214
 MonoBehaviour:
