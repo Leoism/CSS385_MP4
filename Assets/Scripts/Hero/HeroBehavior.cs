@@ -10,13 +10,18 @@ public class HeroBehavior : MonoBehaviour {
     private float mHeroSpeed = kHeroSpeed;
     
     private bool mMouseDrive = true;
+    private bool isChased = false;
     //  Hero state
-    private int mHeroTouchedEnemy = 0;
-    private void TouchedEnemy() { mHeroTouchedEnemy++; }
+    private int hitByEnemy = 0;
+    private void EnemyHit() 
+    {
+        if (isChased){
+            hitByEnemy++;
+        }
+    }
     public string GetHeroState() { return "HERO: Drive(" + (mMouseDrive?"Mouse":"Key") + 
-                                          ") TouchedEnemy(" + mHeroTouchedEnemy + ")   " 
+                                          ") Hit(" + hitByEnemy + ")   " 
                                             + mEggSystem.EggSystemStatus(); }
-
     private void Awake()
     {
         // Actually since Hero spwans eggs, this can be done in the Start() function, but, 
@@ -70,6 +75,6 @@ public class HeroBehavior : MonoBehaviour {
     {
         Debug.Log("Hero touched");
         if (collision.gameObject.name == "Enemy(Clone)")
-            TouchedEnemy();
+            EnemyHit();
     }
 }

@@ -7,6 +7,8 @@ public class EggSpawnSystem : MonoBehaviour
 {
     // UI Support
     public RectTransform mCoolDownTimeBar = null;
+    // heroCam shake when an egg spawned
+    public HeroCamFollow heroCam;
 
     private float kEggInterval = 0.2f;
     private const float kCoolDownBarSize = 100f;
@@ -18,7 +20,10 @@ public class EggSpawnSystem : MonoBehaviour
 
     // Count
     private int mEggCount = 0;
-
+    private void Awake()
+    {
+        heroCam = FindObjectOfType<HeroCamFollow>() as HeroCamFollow;
+    }
     void Start()
     {
         Debug.Assert(mCoolDownTimeBar != null);
@@ -52,6 +57,7 @@ public class EggSpawnSystem : MonoBehaviour
         e.transform.up = dir;
         IncEggCount();
         mSpawnEggAt = Time.realtimeSinceStartup;
+        heroCam.Shake(0.1f, 1.0f);
     }
     #endregion
 
