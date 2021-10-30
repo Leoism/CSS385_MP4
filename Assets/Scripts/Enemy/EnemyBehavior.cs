@@ -195,7 +195,6 @@ public partial class EnemyBehavior : MonoBehaviour
         {
             FrameStart = Time.frameCount;
             FrameEnd = Time.frameCount + 60;
-            currentScale = transform.localScale.x;
             enalargeStateCheck = false;
             shrinkStateCheck = true;
         }
