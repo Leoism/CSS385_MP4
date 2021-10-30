@@ -8,17 +8,24 @@ public class HeroBehavior : MonoBehaviour {
     private const float kHeroRotateSpeed = 90f/2f; // 90-degrees in 2 seconds
     private const float kHeroSpeed = 20f;  // 20-units in a second
     private float mHeroSpeed = kHeroSpeed;
-
-    public GameObject heroPos;
-
     private bool mMouseDrive = true;
     //  Hero state
+    private bool isChased = false;
+    //  Hero state
     private int mHeroTouchedEnemy = 0;
-    public void TouchedEnemy() { mHeroTouchedEnemy++; }
-    public string GetHeroState() { return "HERO: Drive(" + (mMouseDrive?"Mouse":"Key") + 
-                                          ") TouchedEnemy(" + mHeroTouchedEnemy + ")   " 
-                                            + mEggSystem.EggSystemStatus(); }
+    private int hitByEnemy = 0;
 
+    private void TouchedEnemy() { mHeroTouchedEnemy++; }
+
+    private void EnemyHit() 
+    {
+        if (isChased){
+            hitByEnemy++;
+        }
+    }
+    public string GetHeroState() { return "HERO: Drive(" + (mMouseDrive?"Mouse":"Key") + 
+                                          ") Hit(" + hitByEnemy + ")   " 
+                                            + mEggSystem.EggSystemStatus(); }
     private void Awake()
     {
         // Actually since Hero spwans eggs, this can be done in the Start() function, but, 
@@ -29,13 +36,14 @@ public class HeroBehavior : MonoBehaviour {
 
     void Start ()
     {
-        heroPos = GameObject.Find("Hero");
+        isChased = EnemyBehavior.chaseStateCheck;
     }
 	
 	// Update is called once per frame
 	void Update () {
         UpdateMotion();
         ProcessEggSpwan();
+        isChased = EnemyBehavior.chaseStateCheck;
     }
 
     private int EggsOnScreen() { return mEggSystem.GetEggCount();  }
@@ -71,8 +79,7 @@ public class HeroBehavior : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Hero touched");
         if (collision.gameObject.name == "Enemy(Clone)")
-            TouchedEnemy();
+            EnemyHit();
     }
 }

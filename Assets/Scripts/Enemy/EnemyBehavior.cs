@@ -32,7 +32,7 @@ public partial class EnemyBehavior : MonoBehaviour
 
     private bool ccwStateCheck = false;
     private bool cwStateCheck = false;
-    private bool chaseStateCheck = false;
+    static public bool chaseStateCheck = false;
     private bool enalargeStateCheck = false;
     private bool shrinkStateCheck = false;
     private bool stunnedStateCheck = false;
@@ -100,7 +100,7 @@ public partial class EnemyBehavior : MonoBehaviour
         else if (g.name == "Hero" && !stunnedStateCheck && !eggStateCheck && chaseStateCheck)
         {
             ThisEnemyIsHit();
-            sHeroSystem.TouchedEnemy();
+            // sHeroSystem.TouchedEnemy();
         }
         else if (g.name == "Egg(Clone)")
         {
