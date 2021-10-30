@@ -10,13 +10,14 @@ public class HeroBehavior : MonoBehaviour {
     private const float kHeroSpeed = 20f;  // 20-units in a second
     private float mHeroSpeed = kHeroSpeed;
     private bool mMouseDrive = true;
+    public GameObject heroPos = null;
     //  Hero state
     private bool isChased = false;
     //  Hero state
     private int mHeroTouchedEnemy = 0;
     private int hitByEnemy = 0;
 
-    private void TouchedEnemy() { mHeroTouchedEnemy++; }
+    public void TouchedEnemy() { mHeroTouchedEnemy++; }
 
     private void EnemyHit() 
     {
@@ -37,14 +38,34 @@ public class HeroBehavior : MonoBehaviour {
 
     void Start ()
     {
-        isChased = EnemyBehavior.chaseStateCheck;
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("enemy");
+
+        foreach (GameObject enemy in enemies)
+        {
+            if (enemy.GetComponent<EnemyBehavior>().IsChased())
+            {
+                isChased = true;
+                return;
+            }
+        }
+        isChased = false;
     }
 	
 	// Update is called once per frame
 	void Update () {
         UpdateMotion();
         ProcessEggSpwan();
-        isChased = EnemyBehavior.chaseStateCheck;
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("enemy");
+
+        foreach (GameObject enemy in enemies)
+        {
+        if (enemy.GetComponent<EnemyBehavior>().IsChased())
+        {
+            isChased = true;
+            return;
+        }
+        }
+        isChased = false;
     }
 
     private int EggsOnScreen() { return mEggSystem.GetEggCount();  }

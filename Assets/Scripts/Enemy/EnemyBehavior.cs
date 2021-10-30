@@ -32,7 +32,7 @@ public partial class EnemyBehavior : MonoBehaviour
 
     private bool ccwStateCheck = false;
     private bool cwStateCheck = false;
-    static public bool chaseStateCheck = false;
+    private bool chaseStateCheck = false;
     private bool enalargeStateCheck = false;
     private bool shrinkStateCheck = false;
     private bool stunnedStateCheck = false;
@@ -81,6 +81,12 @@ public partial class EnemyBehavior : MonoBehaviour
         PointAtPosition(sWayPoints.WayPoint(mWayPointIndex), kTurnRate);
         transform.position += (kSpeed * Time.smoothDeltaTime) * transform.up;
     }
+
+    public bool IsChased()
+    {
+        return chaseStateCheck;
+    }
+
     #region Trigger into chase or die
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -100,7 +106,7 @@ public partial class EnemyBehavior : MonoBehaviour
         else if (g.name == "Hero" && !stunnedStateCheck && !eggStateCheck && chaseStateCheck)
         {
             ThisEnemyIsHit();
-            // sHeroSystem.TouchedEnemy();
+            sHeroSystem.TouchedEnemy();
         }
         else if (g.name == "Egg(Clone)")
         {
@@ -132,14 +138,15 @@ public partial class EnemyBehavior : MonoBehaviour
 
     private void ThisEnemyIsHit()
     {
+
+        sEnemyCamera.Disable();
         sEnemySystem.OneEnemyDestroyed();
         Destroy(gameObject);
     }
 
     private void ccwState()
     {
-        sEnemyCamera.SetTarget(transform);
-        sEnemyCamera.Enable();
+    
         enemCamActive = true;
         Color redState = Color.red;
         GetComponent<Renderer>().material.color = redState;
@@ -176,6 +183,8 @@ public partial class EnemyBehavior : MonoBehaviour
     }
     private void chaseState()
     {
+        sEnemyCamera.SetTarget(transform);
+        sEnemyCamera.Enable();
         float distance = Vector3.Distance(transform.position, sHeroSystem.heroPos.transform.position);
         if (distance <= 40)
         {
