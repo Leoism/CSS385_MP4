@@ -1,10 +1,11 @@
-using UnityEngine;
+ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
 public class HeroBehavior : MonoBehaviour {
     
     public EggSpawnSystem mEggSystem = null;
+    // public GameObject heroPos;
     private const float kHeroRotateSpeed = 90f/2f; // 90-degrees in 2 seconds
     private const float kHeroSpeed = 20f;  // 20-units in a second
     private float mHeroSpeed = kHeroSpeed;
