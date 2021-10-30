@@ -63,6 +63,7 @@ public class EnemyCamBehavior : MonoBehaviour
     {
         Vector3 centerPoint = GetCenterPoint();
         Vector3 newPosition = centerPoint + offset;
+        cam.orthographicSize = (hero.position - target.position).magnitude;
         transform.position = newPosition;
     }
 
