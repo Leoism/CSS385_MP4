@@ -32,7 +32,7 @@ public partial class EnemyBehavior : MonoBehaviour
 
     private bool ccwStateCheck = false;
     private bool cwStateCheck = false;
-    static public bool chaseStateCheck = false;
+    private bool chaseStateCheck = false;
     private bool enalargeStateCheck = false;
     private bool shrinkStateCheck = false;
     private bool stunnedStateCheck = false;
@@ -81,6 +81,12 @@ public partial class EnemyBehavior : MonoBehaviour
         PointAtPosition(sWayPoints.WayPoint(mWayPointIndex), kTurnRate);
         transform.position += (kSpeed * Time.smoothDeltaTime) * transform.up;
     }
+
+    public bool IsChased()
+    {
+        return chaseStateCheck;
+    }
+
     #region Trigger into chase or die
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -100,7 +106,7 @@ public partial class EnemyBehavior : MonoBehaviour
         else if (g.name == "Hero" && !stunnedStateCheck && !eggStateCheck && chaseStateCheck)
         {
             ThisEnemyIsHit();
-            // sHeroSystem.TouchedEnemy();
+            sHeroSystem.TouchedEnemy();
         }
         else if (g.name == "Egg(Clone)")
         {

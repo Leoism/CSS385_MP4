@@ -26,6 +26,7 @@ public class EnemySpawnSystem
         for (int i = mTotalEnemy; i < kMaxEnemy; i++)
         {
             GameObject p = GameObject.Instantiate(mEnemyTemplate) as GameObject;
+            p.tag = "enemy";
             float x = Random.Range(mSpawnRegionMin.x, mSpawnRegionMax.x);
             float y = Random.Range(mSpawnRegionMin.y, mSpawnRegionMax.y);
             p.transform.position = new Vector3(x, y, 0f);
