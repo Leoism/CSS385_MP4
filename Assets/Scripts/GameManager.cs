@@ -7,9 +7,11 @@ public class GameManager : MonoBehaviour {
 
     public Text mGameStateEcho = null;  // Defined in UnityEngine.UI
     public Text waypointCamStatus = null;
+    public Text enemyChaseCamStatus = null;
     public HeroBehavior mHero = null;
     public WayPointSystem mWayPoints = null;
     public WaypointCameraBehavior waypointCameraBehavior = null;
+    public EnemyCamBehavior enemyCamBehavior = null;
     private EnemySpawnSystem mEnemySystem = null;
 
     private CameraSupport mMainCamera;
@@ -29,13 +31,14 @@ public class GameManager : MonoBehaviour {
 
         mEnemySystem = new EnemySpawnSystem(b.min, b.max);
         // Make sure all enemy sees the same EnemySystem and WayPointSystem
-        EnemyBehavior.InitializeEnemySystem(mEnemySystem, mWayPoints);
+        EnemyBehavior.InitializeEnemySystem(mEnemySystem, mWayPoints, mHero, enemyCamBehavior);
         mEnemySystem.GenerateEnemy();  // Can only create enemies when WayPoint is initialized in EnemyBehavior
     }
     
 	void Update () {
         EchoGameState(); // always do this
         EchoWaypointCamStatus();
+        EchoEnemyChaseCamStatus();
         if (Input.GetKey(KeyCode.Q))
             Application.Quit();
     }
@@ -54,5 +57,10 @@ public class GameManager : MonoBehaviour {
     private void EchoWaypointCamStatus()
     {
         waypointCamStatus.text = waypointCameraBehavior.GetCameraState();
+    }
+
+    private void EchoEnemyChaseCamStatus()
+    {
+        enemyChaseCamStatus.text = enemyCamBehavior.GetEnemyCamState();
     }
 }
