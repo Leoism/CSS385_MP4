@@ -138,14 +138,15 @@ public partial class EnemyBehavior : MonoBehaviour
 
     private void ThisEnemyIsHit()
     {
+
+        sEnemyCamera.Disable();
         sEnemySystem.OneEnemyDestroyed();
         Destroy(gameObject);
     }
 
     private void ccwState()
     {
-        sEnemyCamera.SetTarget(transform);
-        sEnemyCamera.Enable();
+    
         enemCamActive = true;
         Color redState = Color.red;
         GetComponent<Renderer>().material.color = redState;
@@ -182,6 +183,8 @@ public partial class EnemyBehavior : MonoBehaviour
     }
     private void chaseState()
     {
+        sEnemyCamera.SetTarget(transform);
+        sEnemyCamera.Enable();
         float distance = Vector3.Distance(transform.position, sHeroSystem.heroPos.transform.position);
         if (distance <= 40)
         {
