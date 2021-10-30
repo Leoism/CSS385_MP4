@@ -8,7 +8,10 @@ public partial class EnemyBehavior : MonoBehaviour
     static private WayPointSystem sWayPoints = null;
     static private EnemySpawnSystem sEnemySystem = null;
     static private HeroBehavior sHeroSystem = null;
-    static public void InitializeEnemySystem(EnemySpawnSystem s, WayPointSystem w, HeroBehavior h) { sEnemySystem = s; sWayPoints = w; sHeroSystem = h;}
+    static private EnemyCamBehavior sEnemyCamera = null;
+
+    private bool enemCamActive = false;
+    static public void InitializeEnemySystem(EnemySpawnSystem s, WayPointSystem w, HeroBehavior h, EnemyCamBehavior e) { sEnemySystem = s; sWayPoints = w; sHeroSystem = h; sEnemyCamera = e; }
 
     private const float kSpeed = 5f;
     private int mWayPointIndex = 0;
@@ -101,6 +104,7 @@ public partial class EnemyBehavior : MonoBehaviour
         }
         else if (g.name == "Egg(Clone)")
         {
+            enemCamActive = false;
             ccwStateCheck = cwStateCheck = chaseStateCheck
                 = enalargeStateCheck = shrinkStateCheck = false;
 
@@ -134,6 +138,9 @@ public partial class EnemyBehavior : MonoBehaviour
 
     private void ccwState()
     {
+        sEnemyCamera.SetTarget(transform);
+        sEnemyCamera.Enable();
+        enemCamActive = true;
         Color redState = Color.red;
         GetComponent<Renderer>().material.color = redState;
         if (Time.frameCount <= FrameEnd)
@@ -177,6 +184,7 @@ public partial class EnemyBehavior : MonoBehaviour
         }
         else
         {
+            sEnemyCamera.Disable();
             FrameStart = Time.frameCount;
             FrameEnd = Time.frameCount + 60;
             chaseStateCheck = false;
@@ -220,6 +228,11 @@ public partial class EnemyBehavior : MonoBehaviour
 
     private void stunnedState()
     {
+        if (enemCamActive == false)
+        {
+            sEnemyCamera.Disable();
+            enemCamActive = true;
+        }
         //GetComponent<Renderer>().material.color = c;
         GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Textures/EnemyStunned");
         transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z + 90f / 60f);
