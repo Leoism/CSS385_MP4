@@ -52,5 +52,8 @@ public class ShakePosition
     var frac = mSecLeft / mDuration;
     return frac * frac * Mathf.Cos((1 - frac) * this.mOmega);
   }
+  public void setPos (Vector3 pos) {
+    mOrgPos = pos;
+  }
 
 }

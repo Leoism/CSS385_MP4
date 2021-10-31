@@ -18,6 +18,7 @@ public class WayPoint : MonoBehaviour
   void Start()
   {
     mInitPosition = transform.position;
+    Debug.Log(mInitPosition);
   }
 
   void Update()
@@ -41,17 +42,20 @@ public class WayPoint : MonoBehaviour
 
   private void Reposition()
   {
-    if (mShake.ShakeDone())
-    {
-      Vector3 p = mInitPosition;
-      p += new Vector3(Random.Range(-kRepositionRange, kRepositionRange),
-                       Random.Range(-kRepositionRange, kRepositionRange),
-                       0f);
-      transform.position = p;
-      if (waypointCamera.IsOn())
-        waypointCamera.SetCameraPosition(new Vector3(p.x, p.y, -10));
-    }
+    // if (mShake.ShakeDone())
+    // {
+    Vector3 p = mInitPosition;
+    p += new Vector3(Random.Range(-kRepositionRange, kRepositionRange),
+                      Random.Range(-kRepositionRange, kRepositionRange),
+                      0f);
+    transform.position = p;
+
+    if (waypointCamera.IsOn())
+      waypointCamera.SetCameraPosition(new Vector3(p.x, p.y, -10));
+    // }
     GetComponent<SpriteRenderer>().color = mNormalColor;
+    mShake.setPos(transform.position);
+    posBeforeShake = transform.position;
   }
 
   private void OnTriggerEnter2D(Collider2D collision)

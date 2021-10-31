@@ -244,7 +244,7 @@ GameObject:
   - component: {fileID: 117330723}
   m_Layer: 0
   m_Name: HeroCam
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -355,7 +355,7 @@ GameObject:
   - component: {fileID: 280869112}
   m_Layer: 0
   m_Name: WaypointCam
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1382,7 +1382,7 @@ GameObject:
   - component: {fileID: 1206511201}
   m_Layer: 0
   m_Name: EnemyCam
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2026,7 +2026,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 60, y: -180}
+  m_AnchoredPosition: {x: 130, y: -294.1}
   m_SizeDelta: {x: 600, y: 26.700012}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1870365875
@@ -2062,9 +2062,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'New Text
-
-'
+  m_Text: 
 --- !u!222 &1870365876
 CanvasRenderer:
   m_ObjectHideFlags: 0
