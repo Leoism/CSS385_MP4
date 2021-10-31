@@ -10,6 +10,8 @@ public partial class EnemyBehavior : MonoBehaviour
     static private HeroBehavior sHeroSystem = null;
     static private EnemyCamBehavior sEnemyCamera = null;
     private TimedLerp tLerp = new TimedLerp(2f, 2f);
+    private TimedLerp mSizeLerp = new TimedLerp(2f, 2f);
+    private TimedLerp sSizeLerp = new TimedLerp(2f, 2f);
     private bool enemCamActive = false;
     static public void InitializeEnemySystem(EnemySpawnSystem s, WayPointSystem w, HeroBehavior h, EnemyCamBehavior e) { sEnemySystem = s; sWayPoints = w; sHeroSystem = h; sEnemyCamera = e; }
 
@@ -27,6 +29,7 @@ public partial class EnemyBehavior : MonoBehaviour
     Color c;
 
     private float ccwRotation = 90;
+    private float cwRotation = 90;
     private float FrameEnd = 0;
     private float FrameStart = 0;
 
@@ -37,6 +40,7 @@ public partial class EnemyBehavior : MonoBehaviour
     private bool shrinkStateCheck = false;
     private bool stunnedStateCheck = false;
     private bool eggStateCheck = false;
+    private bool destroyableCheck = false;
     // Use this for initialization
     void Start()
     {
@@ -44,6 +48,7 @@ public partial class EnemyBehavior : MonoBehaviour
         scaleEnlarge = scale * 2;
         c = GetComponent<Renderer>().material.color;
         mWayPointIndex = sWayPoints.GetInitWayIndex();
+        
     }
 
     // Update is called once per frame
@@ -70,6 +75,8 @@ public partial class EnemyBehavior : MonoBehaviour
             stunnedState();
         else if (eggStateCheck)
             eggState();
+        else if (destroyableCheck)
+            ThisEnemyIsHit();
         else
             moveForward();
 
@@ -98,18 +105,28 @@ public partial class EnemyBehavior : MonoBehaviour
         Debug.Log("Emeny OnTriggerEnter");
         TriggerCheck(collision.gameObject, collision);
     }
-
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.name == "Hero" && !stunnedStateCheck && !eggStateCheck && chaseStateCheck)
+        {
+            Debug.Log("Touchinbg");
+            ThisEnemyIsHit();
+            sHeroSystem.TouchedEnemy();
+        }
+    }
     private void TriggerCheck(GameObject g, Collider2D c)
     {
         if (g.name == "Hero" && !stunnedStateCheck && !eggStateCheck && !chaseStateCheck && !cwStateCheck && !ccwStateCheck)
         {
+            ccwRotation = transform.eulerAngles.z;
             //ThisEnemyIsHit();
             ccwStateCheck = true;
             FrameStart = Time.frameCount;
-            FrameEnd = Time.frameCount + 60;
+            FrameEnd = Time.frameCount + 120;
         }
         else if (g.name == "Hero" && !stunnedStateCheck && !eggStateCheck && chaseStateCheck)
         {
+            Debug.Log("Touchinbg");
             ThisEnemyIsHit();
             sHeroSystem.TouchedEnemy();
         }
@@ -160,13 +177,19 @@ public partial class EnemyBehavior : MonoBehaviour
         GetComponent<Renderer>().material.color = redState;
         if (Time.frameCount <= FrameEnd)
         {
+            ccwRotation += Time.deltaTime * 270f;
+            //Debug.Log("s" + ccwRotation);
+            // This will set the rotation to a new rotation based on an increasing Y axis.
+            // Which will make it spin horizontally
+            this.transform.rotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, ccwRotation);
             //float lerpPercentage = (Time.frameCount - ccwFrameStart) / 60f;
-            transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z + 90f / 60f);
+            //transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z + 90f / 60f);
         }
         else
         {
+            cwRotation = transform.eulerAngles.z;
             FrameStart = Time.frameCount;
-            FrameEnd = Time.frameCount + 60;
+            FrameEnd = Time.frameCount + 120;
             ccwStateCheck = false;
             cwStateCheck = true;
         }
@@ -179,8 +202,10 @@ public partial class EnemyBehavior : MonoBehaviour
     {
         if (Time.frameCount <= FrameEnd)
         {
-            float lerpPercentage = (Time.frameCount - FrameStart) / 60f;
-            transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z - 90f / 60f);
+            cwRotation -= Time.deltaTime * 270f;
+            this.transform.rotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, cwRotation);
+           // float lerpPercentage = (Time.frameCount - FrameStart) / 60f;
+            //transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z - 90f / 60f);
         }
         else
         {
@@ -201,9 +226,13 @@ public partial class EnemyBehavior : MonoBehaviour
         }
         else
         {
+
+            //transform.localScale += new Vector3(5, 5, 0f);
+            mSizeLerp.SetLerpParms(1f, 10f);
+            mSizeLerp.BeginLerp(transform.localScale, scaleEnlarge);
             sEnemyCamera.Disable();
             FrameStart = Time.frameCount;
-            FrameEnd = Time.frameCount + 60;
+            FrameEnd = Time.frameCount + 120;
             chaseStateCheck = false;
             enalargeStateCheck = true;
             currentScale = transform.localScale.x;
@@ -214,12 +243,22 @@ public partial class EnemyBehavior : MonoBehaviour
     {
         if (Time.frameCount <= FrameEnd)
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, scaleEnlarge, Time.deltaTime * 2f);
+            if (mSizeLerp.LerpIsActive())
+            {
+                Vector3 s = mSizeLerp.UpdateLerp();
+                transform.localScale = s;
+                Debug.Log(s);
+            }
+            //transform.localScale = Vector3.Lerp(transform.localScale, scaleEnlarge, Time.deltaTime * 2f);
         }
         else
         {
+            //transform.localScale -= new Vector3(5, 5, 0f);
+            sSizeLerp.SetLerpParms(1f, 20f);
+            sSizeLerp.BeginLerp(transform.localScale, scale);
+
             FrameStart = Time.frameCount;
-            FrameEnd = Time.frameCount + 60;
+            FrameEnd = Time.frameCount + 120;
             currentScale = transform.localScale.x;
             enalargeStateCheck = false;
             shrinkStateCheck = true;
@@ -232,7 +271,13 @@ public partial class EnemyBehavior : MonoBehaviour
     {
         if (Time.frameCount <= FrameEnd)
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, scale, Time.deltaTime * 2f);
+            if (sSizeLerp.LerpIsActive())
+            {
+                Vector3 s = sSizeLerp.UpdateLerp();
+                transform.localScale = s;
+                Debug.Log(s);
+            }
+            //transform.localScale = Vector3.Lerp(transform.localScale, scale, Time.deltaTime * 2f);
         }
         else
         {
