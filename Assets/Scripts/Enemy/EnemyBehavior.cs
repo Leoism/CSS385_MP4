@@ -122,7 +122,7 @@ public partial class EnemyBehavior : MonoBehaviour
             //ThisEnemyIsHit();
             ccwStateCheck = true;
             FrameStart = Time.frameCount;
-            FrameEnd = Time.frameCount + 120;
+            FrameEnd = Time.frameCount + 60;
         }
         else if (g.name == "Hero" && !stunnedStateCheck && !eggStateCheck && chaseStateCheck)
         {
@@ -177,7 +177,7 @@ public partial class EnemyBehavior : MonoBehaviour
         GetComponent<Renderer>().material.color = redState;
         if (Time.frameCount <= FrameEnd)
         {
-            ccwRotation += Time.deltaTime * 270f;
+            ccwRotation += Time.deltaTime * 90f;
             //Debug.Log("s" + ccwRotation);
             // This will set the rotation to a new rotation based on an increasing Y axis.
             // Which will make it spin horizontally
@@ -189,7 +189,7 @@ public partial class EnemyBehavior : MonoBehaviour
         {
             cwRotation = transform.eulerAngles.z;
             FrameStart = Time.frameCount;
-            FrameEnd = Time.frameCount + 120;
+            FrameEnd = Time.frameCount + 60;
             ccwStateCheck = false;
             cwStateCheck = true;
         }
@@ -202,7 +202,7 @@ public partial class EnemyBehavior : MonoBehaviour
     {
         if (Time.frameCount <= FrameEnd)
         {
-            cwRotation -= Time.deltaTime * 270f;
+            cwRotation -= Time.deltaTime * 90f;
             this.transform.rotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, cwRotation);
            // float lerpPercentage = (Time.frameCount - FrameStart) / 60f;
             //transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z - 90f / 60f);
@@ -228,11 +228,11 @@ public partial class EnemyBehavior : MonoBehaviour
         {
 
             //transform.localScale += new Vector3(5, 5, 0f);
-            mSizeLerp.SetLerpParms(1f, 10f);
+            mSizeLerp.SetLerpParms(1f, 2f);
             mSizeLerp.BeginLerp(transform.localScale, scaleEnlarge);
             sEnemyCamera.Disable();
             FrameStart = Time.frameCount;
-            FrameEnd = Time.frameCount + 120;
+            FrameEnd = Time.frameCount + 60;
             chaseStateCheck = false;
             enalargeStateCheck = true;
             currentScale = transform.localScale.x;
@@ -254,11 +254,11 @@ public partial class EnemyBehavior : MonoBehaviour
         else
         {
             //transform.localScale -= new Vector3(5, 5, 0f);
-            sSizeLerp.SetLerpParms(1f, 20f);
+            sSizeLerp.SetLerpParms(1f, 2f);
             sSizeLerp.BeginLerp(transform.localScale, scale);
 
             FrameStart = Time.frameCount;
-            FrameEnd = Time.frameCount + 120;
+            FrameEnd = Time.frameCount + 60;
             currentScale = transform.localScale.x;
             enalargeStateCheck = false;
             shrinkStateCheck = true;
